@@ -12,27 +12,33 @@ import org.json.simple.JSONArray;
 
 import java.time.LocalTime;
 
+enum ServerStatus
+{
+    online,
+    offline
+}
+
 public final class DiscordIntegrations extends JavaPlugin implements Listener
 {
     FileConfiguration config;
     Webhook webhook;
     Bot bot;
     String content;
-    String serverStatus;
+    ServerStatus serverStatus;
 
     //Config.yml
     String webHookURL;
     String botToken;
     String channelID;
-
+    
     int updateCooldown;
     int lineColor;
 
     @Override
     public void onEnable()
     {
+        serverStatus = ServerStatus.online;
         loadConfig();
-        serverStatus = "Online";
 
         webhook = new Webhook(webHookURL);
         bot = new Bot(botToken, channelID);
@@ -53,8 +59,8 @@ public final class DiscordIntegrations extends JavaPlugin implements Listener
     @Override
     public void onDisable()
     {
+        serverStatus = ServerStatus.offline;
         lineColor = 16711680;
-        serverStatus = "Offline";
         bot.deleteLastMessage();
         prepareJSON();
         webhook.sendMessage(content);
@@ -64,7 +70,7 @@ public final class DiscordIntegrations extends JavaPlugin implements Listener
     {
         String description =
                 "╔═════════════════════\n" +
-                "║ Server status: "+serverStatus+"\n" +
+                "║ Server status: "+getStatus()+"\n" +
                 "║ Server version: "+Bukkit.getServer().getMinecraftVersion()+"\n" +
                 "║ Player on server: "+Bukkit.getServer().getOnlinePlayers().size()+"/"+Bukkit.getMaxPlayers()+"\n" +
                 "║ Server TPS: "+ Bukkit.getServer().getTPS()[0] +"\n" +
@@ -97,5 +103,12 @@ public final class DiscordIntegrations extends JavaPlugin implements Listener
         webHookURL =        config.getString("webhook-url");
         botToken =          config.getString("bot-token");
         channelID =         config.getString("channel-id");
+    }
+
+    private String getStatus()
+    {
+        if(serverStatus == ServerStatus.online)
+            return "online";
+        return "offline";
     }
 }
