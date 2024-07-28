@@ -1,0 +1,7 @@
+webhook-url: ""
+update-cooldown: 200 #in tick (1 second ~ 20 ticks)
+line-color: 65331
+
+bot-activity-text: ""
+bot-token: ""
+channel-id: ""

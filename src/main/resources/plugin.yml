@@ -1,0 +1,4 @@
+name: DiscordIntegrations
+version: '1.0'
+main: me.near85dy.discordIntegrations.DiscordIntegrations
+api-version: '1.19'
