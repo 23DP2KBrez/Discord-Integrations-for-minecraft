@@ -24,6 +24,7 @@ public final class DiscordIntegrations extends JavaPlugin implements Listener
     Webhook webhook;
     Bot bot;
     String content;
+    String serverName;
     ServerStatus serverStatus;
 
     //Config.yml
@@ -81,7 +82,7 @@ public final class DiscordIntegrations extends JavaPlugin implements Listener
         mainContent.put("content", null);
 
         JSONObject embedContent = new JSONObject();
-        embedContent.put("title", "Информация о сервере: выживание #1");
+        embedContent.put("title", "Информация о сервере | " + serverName);
         embedContent.put("description", description);
         embedContent.put("color", lineColor);
 
@@ -97,12 +98,13 @@ public final class DiscordIntegrations extends JavaPlugin implements Listener
         saveDefaultConfig();
         config = getConfig();
 
-        updateCooldown =    config.getInt("message-cooldown");
+        updateCooldown =    config.getInt("update-cooldown");
         lineColor =         config.getInt("line-color");
 
         webHookURL =        config.getString("webhook-url");
         botToken =          config.getString("bot-token");
         channelID =         config.getString("channel-id");
+        serverName =         config.getString("server-name");
     }
 
     private String getStatus()
